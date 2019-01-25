@@ -14,6 +14,7 @@ import {
   ContextEventType,
   Subscription,
 } from './context-listener';
+import {ContextView} from './context-view';
 import {ResolutionOptions, ResolutionSession} from './resolution-session';
 import {BoundValue, getDeepProperty, isPromiseLike} from './value-promise';
 
@@ -170,6 +171,16 @@ export class Context {
    */
   isSubscribed(listener: ContextEventListener) {
     return this.listeners.has(listener);
+  }
+
+  /**
+   * Create a view of the context chain with the given binding filter
+   * @param filter A function to match bindings
+   */
+  createView<T = unknown>(filter: BindingFilter) {
+    const view = new ContextView<T>(this, filter);
+    view.open();
+    return view;
   }
 
   /**
